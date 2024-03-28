@@ -8,13 +8,21 @@ public class PlayerCombat : MonoBehaviour
     public Transform AttackPoint;
     public float AttackRange = 0.5f;
     public LayerMask EnemyLayer;
+    public int attackDamage = 40;
+    public float attackRate = 2f;
+    float nextAttackTime = 0f;
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(Time.time > nextAttackTime)
         {
-            Attack();
+            if (Input.GetKeyDown("c"))
+            {
+                Attack();
+                nextAttackTime = Time.time + 1f/ attackRate;
+            }
         }
+        
     }
 
     void Attack()
@@ -23,7 +31,7 @@ public class PlayerCombat : MonoBehaviour
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRange, EnemyLayer);
         foreach(Collider2D enemy in  hitEnemies) 
         { 
-            Debug.Log("We hit" + enemy.name);
+            enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
     }
 

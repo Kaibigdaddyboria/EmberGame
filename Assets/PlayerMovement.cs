@@ -29,10 +29,10 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
-        else if (Input.GetKeyDown("c"))
-        {
-            m_animator.SetTrigger("Attack");
-        }
+        //else if (Input.GetKeyDown("c"))
+        //{
+        //    m_animator.SetTrigger("Attack");
+        //}
         else if (Mathf.Abs(horizontal) > Mathf.Epsilon && grounded)
             m_animator.SetInteger("AnimState", 2);
         else

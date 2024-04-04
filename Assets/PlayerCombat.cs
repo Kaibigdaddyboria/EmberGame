@@ -11,6 +11,8 @@ public class PlayerCombat : MonoBehaviour
     public int attackDamage = 40;
     public float attackRate = 2f;
     float nextAttackTime = 0f;
+    public Transform shootingPoint;
+    public GameObject bulletPrefab;
     // Update is called once per frame
     void Update()
     {
@@ -22,7 +24,14 @@ public class PlayerCombat : MonoBehaviour
                 nextAttackTime = Time.time + 1f/ attackRate;
             }
         }
-        
+        if (Input.GetKeyDown("k"))
+        {
+            RangedAttack();
+        }
+    }
+    void RangedAttack()
+    {
+        Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
     }
 
     void Attack()

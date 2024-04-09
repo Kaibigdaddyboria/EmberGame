@@ -31,7 +31,8 @@ public class PlayerCombat : MonoBehaviour
     }
     void RangedAttack()
     {
-        Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
+        GameObject FireBall = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
+        // fireball.getcomponent<projectile[script]>().direction = movedirection
     }
 
     void Attack()

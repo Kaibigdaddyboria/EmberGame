@@ -16,7 +16,7 @@ public class BulletScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float move = 
+        float move = 0;
 
         if (move > 0 && !facingRight)
         {

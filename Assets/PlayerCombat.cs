@@ -13,26 +13,26 @@ public class PlayerCombat : MonoBehaviour
     float nextAttackTime = 0f;
     public Transform shootingPoint;
     public GameObject bulletPrefab;
+
     // Update is called once per frame
     void Update()
     {
-        if(Time.time > nextAttackTime)
+        if (Time.time > nextAttackTime)
         {
             if (Input.GetKeyDown("c"))
             {
                 Attack();
-                nextAttackTime = Time.time + 1f/ attackRate;
+                nextAttackTime = Time.time + 1f / attackRate;
             }
         }
-        if (Input.GetKeyDown("k"))
+        if (Time.time > nextAttackTime)
         {
-            RangedAttack();
+            if (Input.GetKeyDown("k"))
+            {
+                RangedAttack();
+                nextAttackTime = Time.time + 1f / attackRate;
+            }
         }
-    }
-    void RangedAttack()
-    {
-        GameObject FireBall = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
-        // fireball.getcomponent<projectile[script]>().direction = movedirection
     }
 
     void Attack()
@@ -44,11 +44,8 @@ public class PlayerCombat : MonoBehaviour
             enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
     }
-
-    private void OnDrawGizmosSelected()
+    void RangedAttack()
     {
-        if (AttackPoint != null) 
-            return;
-        Gizmos.DrawWireSphere(AttackPoint.position, AttackRange);
+        GameObject FireBall = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
     }
 }

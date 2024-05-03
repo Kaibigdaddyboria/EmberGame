@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -30,5 +31,17 @@ public class Enemy : MonoBehaviour
         animator.SetBool("Death", true);
         GetComponent<Collider>().enabled = false;
         this.enabled = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
+        {
+            print("Player");
+        }
+    }
+
+    void Find()
+    {
     }
 }

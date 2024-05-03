@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private float scale;
-    private float horizontal;
+    public float horizontal;
+    public float rotation;
     private float speed = 8f;
     private float jumpingPower = 16f;
     private bool isFacingRight = true;
@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         Flip();
         bool grounded = IsGrounded();
         horizontal = Input.GetAxisRaw("Horizontal");
+        rotation = transform.rotation.y;
         if(Input.GetButtonDown("Jump") && grounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
@@ -88,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
         isDashing = true;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
-        rb.velocity = new Vector2(horizontal * dashingPower, 0f);
+        rb.velocity = new Vector2(dashingPower, 0f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;

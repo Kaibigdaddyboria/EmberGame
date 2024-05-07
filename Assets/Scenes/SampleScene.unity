@@ -328,9 +328,10 @@ GameObject:
   m_Component:
   - component: {fileID: 958169735}
   - component: {fileID: 958169736}
+  - component: {fileID: 958169737}
   m_Layer: 7
-  m_Name: PlayerSensor
-  m_TagString: Untagged
+  m_Name: ProximitySensor
+  m_TagString: ProximitySensor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -394,8 +395,22 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.6108913, y: 1.4794319}
+  m_Size: {x: 6.6, y: 4.24}
   m_EdgeRadius: 1.04
+--- !u!114 &958169737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958169734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bbb67bf71b115e43b1fc9883bf5041a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InRange: 0
+  playerx: 0
 --- !u!1 &1087452406
 GameObject:
   m_ObjectHideFlags: 0
@@ -1506,9 +1521,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1980606395}
   - component: {fileID: 1980606396}
+  - component: {fileID: 1980606397}
   m_Layer: 7
   m_Name: AttackSensor
-  m_TagString: Untagged
+  m_TagString: AttackSensor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1574,6 +1590,20 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.117893934, y: 1.4794319}
   m_EdgeRadius: 1.04
+--- !u!114 &1980606397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980606394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96c88df1da72ff142bdc518a8b1708f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InAttackRange: 0
+  playerx: 0
 --- !u!1 &1287204323331404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1882,6 +1912,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 95734436921925722}
   maxHealth: 100
+  speed: 1
+  pss: {fileID: 958169737}
+  ass: {fileID: 1980606397}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

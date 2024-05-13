@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
+// using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,7 +12,11 @@ public class Enemy : MonoBehaviour
     public float speed = 1.0f;
     public ProximitySensorScript pss;
     public AttackSensorScript ass;
-
+    bool isAttacking = false;
+    public Transform AttackPoint;
+    public float AttackRange = 0.5f;
+    public LayerMask PlayerLayer;
+    public int attackDamage = 40;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +25,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (pss.InRange)
+        print(ass.InAttackRange);
+        if (pss.InRange && !ass.InAttackRange)
         {
             Vector3 Playerposition = new Vector3(pss.playerx, transform.position.y);
             Vector3 enemyPosition = transform.position;
@@ -31,11 +37,25 @@ public class Enemy : MonoBehaviour
             transform.position = newPosition;
             print(enemyPosition);
         }
-        if (ass.InAttackRange)
+        if (ass.InAttackRange && isAttacking == false)
         {
-            
-            animator.SetTrigger("Attack");
-            ass.InAttackRange = false;
+            isAttacking = true;
+            Attack();
+            Invoke("ResetAttck", 1f);
+        }
+    }
+
+    private void ResetAttck()
+    {
+        isAttacking = false;
+    }
+    void Attack()
+    {
+        animator.SetTrigger("Attack");
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRange, PlayerLayer);
+        foreach (Collider2D player in hitEnemies)
+        {
+            player.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
     }
 

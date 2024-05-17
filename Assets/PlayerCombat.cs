@@ -13,6 +13,8 @@ public class PlayerCombat : MonoBehaviour
     float nextAttackTime = 0f;
     public Transform shootingPoint;
     public GameObject bulletPrefab;
+    public int maxHealth = 100;
+    int currentHealth;
 
     // Update is called once per frame
     void Update()
@@ -47,5 +49,22 @@ public class PlayerCombat : MonoBehaviour
     void RangedAttack()
     {
         GameObject FireBall = Instantiate(bulletPrefab, shootingPoint.position, transform.rotation);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        animator.SetTrigger("Hurt");
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    void Die()
+    {
+        Debug.Log("PlayerDied");
+        animator.SetBool("Death", true);
+        GetComponent<Collider>().enabled = false;
+        this.enabled = false;
     }
 }

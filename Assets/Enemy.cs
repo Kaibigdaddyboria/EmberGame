@@ -25,7 +25,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        print(ass.InAttackRange);
         if (pss.InRange && !ass.InAttackRange)
         {
             Vector3 Playerposition = new Vector3(pss.playerx, transform.position.y);
@@ -35,27 +34,27 @@ public class Enemy : MonoBehaviour
             float deltaTime = Time.deltaTime;
             Vector3 newPosition = enemyPosition + direction * speed * deltaTime;           
             transform.position = newPosition;
-            print(enemyPosition);
         }
         if (ass.InAttackRange && isAttacking == false)
         {
             isAttacking = true;
-            Attack();
-            Invoke("ResetAttck", 1f);
+            Invoke("ResetAttack", 1f);
+            print("supposed to attck");
+            Invoke("Attack", 0f);
         }
     }
 
-    private void ResetAttck()
+    private void ResetAttack()
     {
         isAttacking = false;
     }
     void Attack()
     {
         animator.SetTrigger("Attack");
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRange, PlayerLayer);
-        foreach (Collider2D player in hitEnemies)
+        Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRange, PlayerLayer);
+        foreach (Collider2D player in hitPlayer)
         {
-            player.GetComponent<Enemy>().TakeDamage(attackDamage);
+            player.GetComponent<PlayerCombat>().TakeDamage(attackDamage);
         }
     }
 
@@ -77,17 +76,4 @@ public class Enemy : MonoBehaviour
         this.enabled = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        
-    }
-
-    void Find()
-    {
-    }
 }

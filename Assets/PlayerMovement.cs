@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public float horizontally = 1;
     public float horizontal;
     public float rotation;
     private float speed = 8f;
@@ -24,11 +25,15 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Update()
     {
-        if(isDashing)
+        Flip();
+        if (isDashing)
         {
             return;
         }
-        Flip();
+        if (Input.GetKeyDown(KeyCode.Escape) && CanDash)
+        {
+            StartCoroutine(Dash());
+        }
         bool grounded = IsGrounded();
         horizontal = Input.GetAxisRaw("Horizontal");
         rotation = transform.rotation.y;
@@ -50,10 +55,6 @@ public class PlayerMovement : MonoBehaviour
             m_animator.SetInteger("AnimState", 2);
         else
             m_animator.SetInteger("AnimState", 0);
-        if (Input.GetKeyDown(KeyCode.Escape) && CanDash)
-        {
-            StartCoroutine(Dash());
-        }
 
     }
 
@@ -80,6 +81,7 @@ public class PlayerMovement : MonoBehaviour
         { 
             isFacingRight = !isFacingRight;
             transform.Rotate(0f, 180f, 0f);
+            horizontally = -1;
         }
     }
 
@@ -89,14 +91,14 @@ public class PlayerMovement : MonoBehaviour
         isDashing = true;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
-        rb.velocity = new Vector2(dashingPower, 0f);
+        rb.velocity = new Vector2(dashingPower * horizontally, 0f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
         rb.gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
-        CanDash = true;
+        CanDash = true;      
     }
 
 }

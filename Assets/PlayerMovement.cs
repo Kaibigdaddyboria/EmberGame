@@ -30,8 +30,15 @@ public class PlayerMovement : MonoBehaviour
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && CanDash)
+        float yRotation = transform.eulerAngles.y;
+        if (Input.GetKeyDown(KeyCode.Escape) && CanDash && (Mathf.Abs(yRotation - 0) < 1))
         {
+            horizontally = 1;
+            StartCoroutine(Dash());
+        }
+        if (Input.GetKeyDown(KeyCode.Escape) && CanDash && (Mathf.Abs(yRotation - 180) < 1))
+        {
+            horizontally = -1;
             StartCoroutine(Dash());
         }
         bool grounded = IsGrounded();

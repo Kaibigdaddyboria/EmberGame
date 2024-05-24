@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 958169735}
   - component: {fileID: 958169736}
   - component: {fileID: 958169737}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: ProximitySensor
   m_TagString: ProximitySensor
   m_Icon: {fileID: 0}
@@ -1555,7 +1555,7 @@ GameObject:
   - component: {fileID: 1980606395}
   - component: {fileID: 1980606396}
   - component: {fileID: 1980606397}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: AttackSensor
   m_TagString: AttackSensor
   m_Icon: {fileID: 0}
@@ -1671,7 +1671,7 @@ GameObject:
   - component: {fileID: 212652213648620389}
   m_Layer: 7
   m_Name: HeavyBandit
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

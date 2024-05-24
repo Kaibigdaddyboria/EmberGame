@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 1109
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Console
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -239,8 +239,8 @@ MonoBehaviour:
     y: 0
     width: 1120
     height: 625
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -463,23 +463,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: cc870000
-      m_LastClickedID: 34764
-      m_ExpandedIDs: f8faffffcc870000
+      m_SelectedIDs: f0870000
+      m_LastClickedID: 34800
+      m_ExpandedIDs: f8faffffae870000cc870000fa870000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: AttackSensor
+        m_OriginalName: AttackSensor
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 34800
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_TrimLeadingAndTrailingWhitespace: 0
         m_ClientGUIView: {fileID: 9}
@@ -988,7 +988,7 @@ MonoBehaviour:
       sizeOverridden: 0
     - dockPosition: 1
       containerId: overlay-container--right
-      displayed: 1
+      displayed: 0
       id: Scene View/TrailRenderer
       index: 15
       contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":24.0,"y":0.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
@@ -1027,9 +1027,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -1.9247293, y: 0.33500236, z: 0.032581136}
+    m_Target: {x: -0.23651682, y: 0.059975713, z: -4.508327}
     speed: 2
-    m_Value: {x: -1.9247293, y: 0.33500236, z: 0.032581136}
+    m_Value: {x: -0.23651682, y: 0.059975713, z: -4.508327}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1079,9 +1079,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 6.723566
+    m_Target: 5.311291
     speed: 2
-    m_Value: 6.723566
+    m_Value: 5.311291
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1276,9 +1276,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 4e8b0000
-    m_LastClickedID: 35662
-    m_ExpandedIDs: 000000004c8b00004e8b0000508b0000528b0000
+    m_SelectedIDs: 528b0000
+    m_LastClickedID: 35666
+    m_ExpandedIDs: 000000004c8b00004e8b0000508b0000528b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1333,8 +1333,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: ec870000
-    m_LastClickedInstanceID: 34796
+    m_SelectedInstanceIDs: fa870000
+    m_LastClickedInstanceID: 34810
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300007a9e000086860000000000009a870000428c00000288000018880000
     m_RenameOverlay:

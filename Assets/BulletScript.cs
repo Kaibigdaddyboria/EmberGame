@@ -22,9 +22,15 @@ public class BulletScript : MonoBehaviour
         rb.velocity = transform.right * speed;
     }
     private void OnTriggerEnter2D(Collider2D hitinfo)
-    {    
-        Destroy(gameObject);
+    {
+        if (!hitinfo.CompareTag("ProximitySensor") && !hitinfo.CompareTag("AttackSensor") && !hitinfo.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
 
+        }
             Enemy enemy = hitinfo.GetComponent<Enemy>();
         if (enemy != null)
         {

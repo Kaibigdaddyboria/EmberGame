@@ -16,6 +16,11 @@ public class PlayerCombat : MonoBehaviour
     public int maxHealth = 100;
     int currentHealth;
 
+
+    void Start()
+    {
+        currentHealth = maxHealth;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -23,18 +28,20 @@ public class PlayerCombat : MonoBehaviour
         {
             if (Input.GetKeyDown("c"))
             {
-                Attack();
                 nextAttackTime = Time.time + 1f / attackRate;
+                print("cant spam");
+                Attack();
             }
         }
         if (Time.time > nextAttackTime)
         {
             if (Input.GetKeyDown("k"))
             {
-                RangedAttack();
                 nextAttackTime = Time.time + 1f / attackRate;
+                RangedAttack();
             }
         }
+
     }
 
     void Attack()
@@ -55,6 +62,7 @@ public class PlayerCombat : MonoBehaviour
     {
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
+        print(currentHealth.ToString());
         if (currentHealth <= 0)
         {
             Die();

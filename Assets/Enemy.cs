@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public float delay = 0f;
     public Animator animator;
     public int maxHealth = 100;
     int currentHealth;
@@ -17,6 +18,7 @@ public class Enemy : MonoBehaviour
     public float AttackRange = 0.5f;
     public LayerMask PlayerLayer;
     public int attackDamage = 40;
+    bool isalive = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,22 +27,38 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (pss.InRange && !ass.InAttackRange)
+        if (isalive == true) 
         {
-            Vector3 Playerposition = new Vector3(pss.playerx, transform.position.y);
-            Vector3 enemyPosition = transform.position;
-            Vector3 direction = Playerposition - enemyPosition;
-            direction = Vector3.Normalize(direction);
-            float deltaTime = Time.deltaTime;
-            Vector3 newPosition = enemyPosition + direction * speed * deltaTime;           
-            transform.position = newPosition;
-        }
-        if (ass.InAttackRange && isAttacking == false)
-        {
-            isAttacking = true;
-            Invoke("ResetAttack", 1f);
-            print("supposed to attck");
-            Invoke("Attack", 0f);
+            if (pss.InRange && !ass.InAttackRange)
+            {
+                Vector3 Playerposition = new Vector3(pss.playerx, transform.position.y);
+                Vector3 enemyPosition = transform.position;
+                Vector3 direction = Playerposition - enemyPosition;
+                print(direction);
+                if (direction.x > 0)
+                {
+                    transform.Rotate(0, 0, 0);
+                }
+                else if (direction.x < 0)
+                {
+                    transform.Rotate(0, 180, 0);
+                }
+                else 
+                {
+                    transform.Rotate(0, 180, 0);
+                }
+                direction = Vector3.Normalize(direction);
+                float deltaTime = Time.deltaTime;
+                Vector3 newPosition = enemyPosition + direction * speed * deltaTime;
+                transform.position = newPosition;
+            }
+            if (ass.InAttackRange && isAttacking == false)
+            {
+                isAttacking = true;
+                Invoke("ResetAttack", 1f);
+                Invoke("Attack", 0);
+                delay = 0f;
+            }
         }
     }
 
@@ -50,31 +68,38 @@ public class Enemy : MonoBehaviour
     }
     void Attack()
     {
+        print("delayed");
         animator.SetTrigger("Attack");
+        Invoke("DelayedAttack", 0.5f);
+
+    }
+    void DelayedAttack()
+    {
+        
         Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRange, PlayerLayer);
         foreach (Collider2D Player in hitPlayer)
         {
+            print(Player.gameObject.name);
             Player.GetComponent<PlayerCombat>().TakeDamage(attackDamage);
             // enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
     }
-
     public void TakeDamage(int damage) 
-    { 
+    {
+        delay = 1f;
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
         if(currentHealth <= 0)
         {
-            Die();
+            isalive = false;
+            animator.SetBool("Death", true);
+            Invoke("Die", 1f);
         }
     }
 
     void Die()
     {
-        Debug.Log("EnemyDied");
-        animator.SetBool("Death", true);
-        GetComponent<Collider>().enabled = false;
-        this.enabled = false;
+        Destroy(gameObject);       
     }
 
 }

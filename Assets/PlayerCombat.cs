@@ -13,7 +13,7 @@ public class PlayerCombat : MonoBehaviour
     float nextAttackTime = 0f;
     public Transform shootingPoint;
     public GameObject bulletPrefab;
-    public int maxHealth = 100;
+    public int maxHealth = 200;
     int currentHealth;
 
 
@@ -41,15 +41,18 @@ public class PlayerCombat : MonoBehaviour
                 RangedAttack();
             }
         }
-
     }
 
     void Attack()
     {
         animator.SetTrigger("Attack");
+        Invoke("DelayedAttack", 0.5f);
+    }
+    void DelayedAttack()
+    {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRange, EnemyLayer);
-        foreach(Collider2D enemy in  hitEnemies) 
-        { 
+        foreach (Collider2D enemy in hitEnemies)
+        {
             enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
     }
@@ -62,7 +65,7 @@ public class PlayerCombat : MonoBehaviour
     {
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
-        print(currentHealth.ToString());
+        print(currentHealth);
         if (currentHealth <= 0)
         {
             Die();

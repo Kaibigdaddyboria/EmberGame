@@ -19,6 +19,9 @@ public class Enemy : MonoBehaviour
     public LayerMask PlayerLayer;
     public int attackDamage = 40;
     bool isalive = true;
+    bool isStaggered = false;
+    public float knockbackForce = 5f; // Force of the knockback
+    [SerializeField] private Rigidbody2D rb; // Reference to the Rigidbody2D component
     // Start is called before the first frame update
     void Start()
     {
@@ -27,31 +30,31 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (isalive == true) 
+        if (isalive == true && !isStaggered) // Check if the enemy is not staggere
         {
             if (pss.InRange && !ass.InAttackRange)
             {
                 Vector3 Playerposition = new Vector3(pss.playerx, transform.position.y);
                 Vector3 enemyPosition = transform.position;
                 Vector3 direction = Playerposition - enemyPosition;
-                print(direction);
+                direction = Vector3.Normalize(direction);
+                print(direction.x);
                 if (direction.x > 0)
                 {
-                    transform.Rotate(0, 0, 0);
+                    transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
                 }
                 else if (direction.x < 0)
                 {
-                    transform.Rotate(0, 180, 0);
+                    transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
                 }
-                else 
-                {
-                    transform.Rotate(0, 180, 0);
-                }
-                direction = Vector3.Normalize(direction);
                 float deltaTime = Time.deltaTime;
                 Vector3 newPosition = enemyPosition + direction * speed * deltaTime;
                 transform.position = newPosition;
             }
+            //Attack System: If the player is within a certain range of the enemy the enemy should move toward the player.
+            //When the enemy is close enough to the player the enemy should pause for a second, then attck the player 
+            //The enemy should continue to attack with 1 second inbetween until the player moves out of the enemies attack range.
+            //If the enemy is hit it should cause a stagger where the enemy can't attack for a couple seconds and is knocked backwards.
             if (ass.InAttackRange && isAttacking == false)
             {
                 isAttacking = true;
@@ -68,7 +71,6 @@ public class Enemy : MonoBehaviour
     }
     void Attack()
     {
-        print("delayed");
         animator.SetTrigger("Attack");
         Invoke("DelayedAttack", 0.5f);
 
@@ -81,7 +83,6 @@ public class Enemy : MonoBehaviour
         {
             print(Player.gameObject.name);
             Player.GetComponent<PlayerCombat>().TakeDamage(attackDamage);
-            // enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
     }
     public void TakeDamage(int damage) 
@@ -95,11 +96,26 @@ public class Enemy : MonoBehaviour
             animator.SetBool("Death", true);
             Invoke("Die", 1f);
         }
+        else
+        {
+            StartCoroutine(Stagger()); // Start the stagger coroutine
+        }
     }
-
     void Die()
     {
         Destroy(gameObject);       
     }
+    IEnumerator Stagger()
+    {
+        isStaggered = true; // Set staggered state to true
 
+        // Apply knockback force
+        Vector2 knockbackDirection = (transform.position).normalized;
+        rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(1f); // Wait for 1 second
+
+        isStaggered = false; // Reset staggered state
+
+    }
 }

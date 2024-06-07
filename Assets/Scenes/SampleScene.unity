@@ -1949,6 +1949,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   attackDamage: 40
+  knockbackForce: 5
+  rb: {fileID: 50959881426835596}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

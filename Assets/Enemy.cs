@@ -6,22 +6,22 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float delay = 0f;
+    public float delay;
     public Animator animator;
-    public int maxHealth = 100;
-    int currentHealth;
-    public float speed = 1.0f;
+    public int maxHealth;
+    public int currentHealth;
+    public float speed;
     public ProximitySensorScript pss;
     public AttackSensorScript ass;
     bool isAttacking = false;
     public Transform AttackPoint;
-    public float AttackRange = 0.5f;
+    public float radius;
     public LayerMask PlayerLayer;
-    public int attackDamage = 40;
+    public int attackDamage;
     bool isalive = true;
-    bool isStaggered = false;
-    public float knockbackForce = 5f; // Force of the knockback
-    [SerializeField] private Rigidbody2D rb; // Reference to the Rigidbody2D component
+    //bool isStaggered = false;
+    //public float knockbackForce; // Force of the knockback
+    //[SerializeField] private Rigidbody2D rb; // Reference to the Rigidbody2D component
     // Start is called before the first frame update
     void Start()
     {
@@ -30,8 +30,12 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (isalive == true && !isStaggered) // Check if the enemy is not staggere
+        if (isalive == true) //&& !isStaggered) Check if the enemy is not staggered
         {
+            if (currentHealth > 100)
+            {
+                currentHealth = 100;
+            }
             if (pss.InRange && !ass.InAttackRange)
             {
                 Vector3 Playerposition = new Vector3(pss.playerx, transform.position.y);
@@ -57,10 +61,9 @@ public class Enemy : MonoBehaviour
             //If the enemy is hit it should cause a stagger where the enemy can't attack for a couple seconds and is knocked backwards.
             if (ass.InAttackRange && isAttacking == false)
             {
-                isAttacking = true;
-                Invoke("ResetAttack", 1f);
-                Invoke("Attack", 0);
-                delay = 0f;
+                isAttacking = true;               
+                Invoke("Attack", 1f);
+                Invoke("ResetAttack", 2f);
             }
         }
     }
@@ -78,7 +81,7 @@ public class Enemy : MonoBehaviour
     void DelayedAttack()
     {
         
-        Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRange, PlayerLayer);
+        Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(AttackPoint.position, radius, PlayerLayer);
         foreach (Collider2D Player in hitPlayer)
         {
             print(Player.gameObject.name);
@@ -87,7 +90,6 @@ public class Enemy : MonoBehaviour
     }
     public void TakeDamage(int damage) 
     {
-        delay = 1f;
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
         if(currentHealth <= 0)
@@ -98,24 +100,28 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Stagger()); // Start the stagger coroutine
+            //StartCoroutine(Stagger()); // Start the stagger coroutine
         }
     }
     void Die()
     {
         Destroy(gameObject);       
     }
-    IEnumerator Stagger()
+    //IEnumerator Stagger()
+    //{
+    //    isStaggered = true; // Set staggered state to true
+
+    //    // Apply knockback force
+    //    Vector2 knockbackDirection = (transform.position).normalized;
+    //    rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+
+    //    yield return new WaitForSeconds(1f); // Wait for 1 second
+
+    //    isStaggered = false; // Reset staggered state
+
+    //}
+    private void OnDrawGizmos()
     {
-        isStaggered = true; // Set staggered state to true
-
-        // Apply knockback force
-        Vector2 knockbackDirection = (transform.position).normalized;
-        rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-
-        yield return new WaitForSeconds(1f); // Wait for 1 second
-
-        isStaggered = false; // Reset staggered state
-
+        Gizmos.DrawWireSphere(AttackPoint.transform.position, radius);
     }
 }

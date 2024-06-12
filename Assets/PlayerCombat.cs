@@ -1,21 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerCombat : MonoBehaviour
 {
     public Animator animator;
     public Transform AttackPoint;
-    public float AttackRange = 0.5f;
+    public float radius;
     public LayerMask EnemyLayer;
-    public int attackDamage = 40;
-    public float attackRate = 2f;
-    float nextAttackTime = 0f;
+    public int attackDamage;
+    public float attackRate;
+    float nextAttackTime;
     public Transform shootingPoint;
     public GameObject bulletPrefab;
-    public int maxHealth = 200;
-    int currentHealth;
-
+    public float maxHealth;
+    public float currentHealth;
+    public Image healthBar;
 
     void Start()
     {
@@ -24,6 +26,7 @@ public class PlayerCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        healthBar.fillAmount = Mathf.Clamp(currentHealth / maxHealth, 0, 1);
         if (Time.time > nextAttackTime)
         {
             if (Input.GetKeyDown("c"))
@@ -50,7 +53,7 @@ public class PlayerCombat : MonoBehaviour
     }
     void DelayedAttack()
     {
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, AttackRange, EnemyLayer);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(AttackPoint.position, radius, EnemyLayer);
         foreach (Collider2D enemy in hitEnemies)
         {
             enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
@@ -73,9 +76,15 @@ public class PlayerCombat : MonoBehaviour
     }
     void Die()
     {
-        Debug.Log("PlayerDied");
         animator.SetBool("Death", true);
-        GetComponent<Collider>().enabled = false;
-        this.enabled = false;
+        Invoke("LoadScene", 1f);
+    }
+    void LoadScene()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(AttackPoint.transform.position, radius);
     }
 }

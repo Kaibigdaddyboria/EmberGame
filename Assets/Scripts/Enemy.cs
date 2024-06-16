@@ -19,6 +19,8 @@ public class Enemy : MonoBehaviour
     public LayerMask PlayerLayer;
     public int attackDamage;
     bool isalive = true;
+
+    [SerializeField] private Rigidbody2D rb;
     //bool isStaggered = false;
     //public float knockbackForce; // Force of the knockback
     //[SerializeField] private Rigidbody2D rb; // Reference to the Rigidbody2D component
@@ -80,7 +82,6 @@ public class Enemy : MonoBehaviour
     }
     void DelayedAttack()
     {
-        
         Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(AttackPoint.position, radius, PlayerLayer);
         foreach (Collider2D Player in hitPlayer)
         {
@@ -101,6 +102,21 @@ public class Enemy : MonoBehaviour
         else
         {
             //StartCoroutine(Stagger()); // Start the stagger coroutine
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if the collision is with the player
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Get the PlayerCombat component from the player and apply damage
+            PlayerCombat playerCombat = collision.gameObject.GetComponent<PlayerCombat>();
+            if (playerCombat != null)
+            {
+                playerCombat.TakeDamage(attackDamage);
+            }
+            rb.velocity = new Vector2(0, 0);
+            transform.position = rb.position;
         }
     }
     void Die()

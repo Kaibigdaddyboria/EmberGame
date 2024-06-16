@@ -6,6 +6,8 @@ TagManager:
   tags:
   - ProximitySensor
   - AttackSensor
+  - NextLevel
+  - PrevLevel
   layers:
   - Default
   - TransparentFX

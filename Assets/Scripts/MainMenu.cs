@@ -5,8 +5,35 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void PlayGame()
-    {
-        SceneManager.LoadSceneAsync(1);
-    }
+    //public static MainMenu instance;
+
+    //private void Awake()
+    //{
+    //    if (instance == null)
+    //    {
+    //        instance = this;
+    //        DontDestroyOnLoad(gameObject);
+    //    }
+    //    else
+    //    {
+    //        Destroy(gameObject);
+    //    }
+//    //}
+//    public void NextLevel()
+//    {
+//        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+//    }
+//    public void PrevLevel() 
+//    {
+//        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex - 1);
+//    }
+
+//    public void LoadScene(string sceneName) 
+//    { 
+//        SceneManager.LoadScene(sceneName);
+//    }
+//    public void PlayGame()
+//    {
+//        SceneManager.LoadSceneAsync(1);
+//    }
 }

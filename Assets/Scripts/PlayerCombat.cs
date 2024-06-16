@@ -18,7 +18,10 @@ public class PlayerCombat : MonoBehaviour
     public float maxHealth;
     public float currentHealth;
     public Image healthBar;
+    public bool isAttacking;
+    public bool isDamaged;
 
+    [SerializeField] private Rigidbody2D rb;
     void Start()
     {
         currentHealth = maxHealth;
@@ -31,6 +34,9 @@ public class PlayerCombat : MonoBehaviour
         {
             if (Input.GetKeyDown("c"))
             {
+                rb.velocity = new Vector2(0,0);
+                isAttacking = true;
+                Invoke(nameof(StopAttacking), 0.7f);
                 nextAttackTime = Time.time + 1f / attackRate;
                 print("cant spam");
                 Attack();
@@ -40,6 +46,9 @@ public class PlayerCombat : MonoBehaviour
         {
             if (Input.GetKeyDown("k"))
             {
+                rb.velocity = new Vector2(0, 0);
+                isAttacking = true;
+                Invoke(nameof(StopAttacking), 0.7f);
                 nextAttackTime = Time.time + 1f / attackRate;
                 RangedAttack();
             }
@@ -50,6 +59,14 @@ public class PlayerCombat : MonoBehaviour
     {
         animator.SetTrigger("Attack");
         Invoke("DelayedAttack", 0.5f);
+    }
+    void StopAttacking()
+    {
+        isAttacking = false;
+    }
+    void NotDamaged()
+    {
+        isDamaged = false;
     }
     void DelayedAttack()
     {
@@ -66,6 +83,9 @@ public class PlayerCombat : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        rb.velocity = new Vector2(0, 0);
+        isDamaged = true;
+        Invoke(nameof(NotDamaged), 0.5f);
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
         print(currentHealth);

@@ -5,70 +5,64 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float horizontally = 1;
-    public float horizontal;
-    public float rotation;
-    private float speed = 8f;
-    private float jumpingPower = 16f;
+    //Variables for movement control
+    public float speed = 8f;
+    public float jumpingPower = 16f;
     private bool isFacingRight = true;
+    private float yRotation;
+    private float horizontal;
+    //Variables for animation
     public Animator m_animator;
+    //Variables for dashing
+    public float dashingPower = 24f;
+    public float dashingTime = 0.2f;
+    public float dashingCooldown = 1f;
+    private bool CanDash = true;
+    private bool isDashing;
+    private float dashDirection;
+    //Variables for wall sliding and jumping
+    public float wallJumpingDuration = 0.4f;
+    public float wallJumpingTime = 0.2f;
+    public float wallSlidingSpeed;
+    private bool isWallSliding;
+    private bool isWallJumping;
+    private float wallJumpingDirection;
+    private float wallJumpingCounter;
+    private Vector2 wallJumpingPower = new Vector2(6f, 14f);
+
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private TrailRenderer tr;
     [SerializeField] private Transform wallCheck;
     [SerializeField] private LayerMask wallLayer;
-    private bool CanDash = true;
-    private bool isDashing;
-    private float dashingPower = 24f;
-    private float dashingTime = 0.2f;
-    private float dashingCooldown = 1f;
-    private bool isWallSliding;
-    private float wallSlidingSpeed;
+    [SerializeField] private TrailRenderer tr;
 
-    private bool isWallJumping;
-    private float wallJumpingDirection;
-    private float wallJumpingTime = 0.2f;
-    private float wallJumpingCounter;
-    private float wallJumpingDuration = 0f;
-    private Vector2 wallJumpingPower = new Vector2(16f, 16f);
-
+    public PlayerCombat combat;
     // Start is called before the first frame update
     void Update()
     {
-        
-        if (isDashing)
+        if (combat.isAttacking || combat.isDamaged)
         {
             return;
         }
+        //Runs these functions on update
+        SetRoation();
         WallSlide();
         WallJump();
-        
         if (!isWallJumping)
         {
             Flip();
         }
-        float yRotation = transform.eulerAngles.y;
-        if (Input.GetKeyDown(KeyCode.Escape) && CanDash && (Mathf.Abs(yRotation - 0) < 1))
-        {
-            horizontally = 1;
-            StartCoroutine(Dash());
-        }
-        if (Input.GetKeyDown(KeyCode.Escape) && CanDash && (Mathf.Abs(yRotation - 180) < 1))
-        {
-            horizontally = -1;
-            StartCoroutine(Dash());
-        }
+        DashTrigger();
         bool grounded = IsGrounded();
         horizontal = Input.GetAxisRaw("Horizontal");
-        rotation = transform.rotation.y;
-        if(Input.GetButtonDown("Jump") && grounded)
+        if (Input.GetButtonDown("Jump") && grounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
             grounded = false;
             m_animator.SetTrigger("Jump");
         }
-        if(Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
@@ -82,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (isDashing)
+        if (isDashing || combat.isAttacking || combat.isDamaged)
         {
             return;
         }
@@ -99,21 +93,46 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Flip()
     {
-        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f) 
-        { 
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        {
             isFacingRight = !isFacingRight;
             transform.Rotate(0f, 180f, 0f);
-            horizontally = -1;
         }
     }
-
+    private void SetRoation()
+    {
+        yRotation = transform.eulerAngles.y;
+        if ((Mathf.Abs(yRotation - 0) < 1))
+        {
+            yRotation = 1;
+        }
+        if (Mathf.Abs(yRotation - 180) < 1)
+        {
+            yRotation = -1;
+        }
+    }
+    private void DashTrigger()
+    {
+        if (!IsWalled())
+        {
+            dashDirection = yRotation;
+        }
+        if (Input.GetKeyDown(KeyCode.Escape) && CanDash && yRotation == 1)
+        {
+            StartCoroutine(Dash());
+        }
+        if (Input.GetKeyDown(KeyCode.Escape) && CanDash && yRotation == -1)
+        {
+            StartCoroutine(Dash());
+        }
+    }
     private IEnumerator Dash()
     {
         CanDash = false;
         isDashing = true;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
-        rb.velocity = new Vector2(dashingPower * horizontally, 0f);
+        rb.velocity = new Vector2(dashingPower * dashDirection, 0f);
         tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
@@ -133,6 +152,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+            dashDirection = -yRotation;
         }
         else
         {
@@ -144,8 +164,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isWallSliding)
         {
-            isWallSliding = false;
-            wallJumpingDirection = horizontally;
+            isWallJumping = false;
+            wallJumpingDirection = -yRotation;
             wallJumpingCounter = wallJumpingTime;
 
             CancelInvoke(nameof(StopWallJumping));
@@ -161,11 +181,10 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
             wallJumpingCounter = 0f;
 
-            if (horizontally != wallJumpingDirection)
+            if (yRotation != wallJumpingDirection)
             {
                 isFacingRight = !isFacingRight;
                 transform.Rotate(0f, 180f, 0f);
-                horizontal = -1;
             }
 
             Invoke(nameof(StopWallJumping), wallJumpingDuration);

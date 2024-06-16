@@ -21,30 +21,35 @@ public class Enemy : MonoBehaviour
     bool isalive = true;
 
     [SerializeField] private Rigidbody2D rb;
-    //bool isStaggered = false;
-    //public float knockbackForce; // Force of the knockback
-    //[SerializeField] private Rigidbody2D rb; // Reference to the Rigidbody2D component
     // Start is called before the first frame update
     void Start()
     {
+        // Set current helth to maxhealth when the game starts
         currentHealth = maxHealth;
     }
 
+    // Update is called once per frame
     private void Update()
     {
-        if (isalive == true) //&& !isStaggered) Check if the enemy is not staggered
+        // Check if the enemy is alive
+        if (isalive == true)
         {
+            // Make sure the current health is not above the maximum health
             if (currentHealth > 100)
             {
                 currentHealth = 100;
             }
+
+            // Check if the player is in range but not in attack range
             if (pss.InRange && !ass.InAttackRange)
             {
+                // Calculate the direction towards the player
                 Vector3 Playerposition = new Vector3(pss.playerx, transform.position.y);
                 Vector3 enemyPosition = transform.position;
                 Vector3 direction = Playerposition - enemyPosition;
                 direction = Vector3.Normalize(direction);
-                print(direction.x);
+
+                // Rotate the enemy to face the player
                 if (direction.x > 0)
                 {
                     transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
@@ -53,89 +58,88 @@ public class Enemy : MonoBehaviour
                 {
                     transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
                 }
+
+                // Move the enemy towards the player
                 float deltaTime = Time.deltaTime;
                 Vector3 newPosition = enemyPosition + direction * speed * deltaTime;
                 transform.position = newPosition;
             }
-            //Attack System: If the player is within a certain range of the enemy the enemy should move toward the player.
-            //When the enemy is close enough to the player the enemy should pause for a second, then attck the player 
-            //The enemy should continue to attack with 1 second inbetween until the player moves out of the enemies attack range.
-            //If the enemy is hit it should cause a stagger where the enemy can't attack for a couple seconds and is knocked backwards.
+
+            // Check if the player is in attack range and the enemy is not already attacking
             if (ass.InAttackRange && isAttacking == false)
             {
-                isAttacking = true;               
+                isAttacking = true;
                 Invoke("Attack", 1f);
                 Invoke("ResetAttack", 2f);
             }
         }
     }
 
+    // Resets the attack state
     private void ResetAttack()
     {
         isAttacking = false;
     }
+
+    // Initiates the attack animation and invokes the DelayedAttack method
     void Attack()
     {
         animator.SetTrigger("Attack");
         Invoke("DelayedAttack", 0.5f);
-
     }
+
+    // Deals damage to the player after a delay
     void DelayedAttack()
     {
         Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(AttackPoint.position, radius, PlayerLayer);
+        // Deal damage to each player detected
         foreach (Collider2D Player in hitPlayer)
         {
-            print(Player.gameObject.name);
             Player.GetComponent<PlayerCombat>().TakeDamage(attackDamage);
         }
     }
-    public void TakeDamage(int damage) 
+
+    // Reduces the enemy's health and handles death
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
-        if(currentHealth <= 0)
+
+        // Check if the enemy's health is below or equal to 0
+        if (currentHealth <= 0)
         {
             isalive = false;
             animator.SetBool("Death", true);
             Invoke("Die", 1f);
         }
-        else
-        {
-            //StartCoroutine(Stagger()); // Start the stagger coroutine
-        }
     }
+
+    // Handles collision with the player
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if the collision is with the player
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Get the PlayerCombat component from the player and apply damage
             PlayerCombat playerCombat = collision.gameObject.GetComponent<PlayerCombat>();
+
+            // Deal damage to the player on collision
             if (playerCombat != null)
             {
                 playerCombat.TakeDamage(attackDamage);
             }
+
+            // Stop the enemy's movement on collision
             rb.velocity = new Vector2(0, 0);
             transform.position = rb.position;
         }
     }
+
+    // Kills the enemy
     void Die()
     {
-        Destroy(gameObject);       
+        Destroy(gameObject);
     }
-    //IEnumerator Stagger()
-    //{
-    //    isStaggered = true; // Set staggered state to true
 
-    //    // Apply knockback force
-    //    Vector2 knockbackDirection = (transform.position).normalized;
-    //    rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
-
-    //    yield return new WaitForSeconds(1f); // Wait for 1 second
-
-    //    isStaggered = false; // Reset staggered state
-
-    //}
+    // Draws the attack radius in the editor
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(AttackPoint.transform.position, radius);

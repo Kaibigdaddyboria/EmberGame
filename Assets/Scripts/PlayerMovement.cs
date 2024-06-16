@@ -2,25 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerMovement : MonoBehaviour
 {
-    //Variables for movement control
+    // Variables for movement control
     public float speed = 8f;
     public float jumpingPower = 16f;
     private bool isFacingRight = true;
     private float yRotation;
     private float horizontal;
-    //Variables for animation
+
+    // Variables for animation
     public Animator m_animator;
-    //Variables for dashing
+
+    // Variables for dashing
     public float dashingPower = 24f;
     public float dashingTime = 0.2f;
     public float dashingCooldown = 1f;
     private bool CanDash = true;
     private bool isDashing;
     private float dashDirection;
-    //Variables for wall sliding and jumping
+
+    // Variables for wall sliding and jumping
     public float wallJumpingDuration = 0.4f;
     public float wallJumpingTime = 0.2f;
     public float wallSlidingSpeed;
@@ -38,14 +40,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private TrailRenderer tr;
 
     public PlayerCombat combat;
-    // Start is called before the first frame update
+
+    // Update is called once per frame
     void Update()
     {
+        // Checks if either bool is true
         if (combat.isAttacking || combat.isDamaged)
         {
             return;
         }
-        //Runs these functions on update
+
+        // Runs these functions on update
         SetRoation();
         WallSlide();
         WallJump();
@@ -54,14 +59,19 @@ public class PlayerMovement : MonoBehaviour
             Flip();
         }
         DashTrigger();
+        //S ets variables
         bool grounded = IsGrounded();
         horizontal = Input.GetAxisRaw("Horizontal");
+
+        // Handle jumping
         if (Input.GetButtonDown("Jump") && grounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
             grounded = false;
             m_animator.SetTrigger("Jump");
         }
+
+        // Handle jump release
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
@@ -70,27 +80,32 @@ public class PlayerMovement : MonoBehaviour
             m_animator.SetInteger("AnimState", 2);
         else
             m_animator.SetInteger("AnimState", 0);
-
     }
 
-    // Update is called once per frame
+    // FixedUpdate is called at a fixed interval
     void FixedUpdate()
     {
         if (isDashing || combat.isAttacking || combat.isDamaged)
         {
             return;
         }
+
+        // Checks if isWallJumping is true then handles horizontal movement
         if (!isWallJumping)
         {
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
         }
     }
+
+    // Check if the player is grounded
     private bool IsGrounded()
     {
         bool grounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
         m_animator.SetBool("Grounded", grounded);
         return grounded;
     }
+
+    // Flip the player's direction
     private void Flip()
     {
         if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
@@ -99,6 +114,8 @@ public class PlayerMovement : MonoBehaviour
             transform.Rotate(0f, 180f, 0f);
         }
     }
+
+    // Set the player's rotation
     private void SetRoation()
     {
         yRotation = transform.eulerAngles.y;
@@ -111,6 +128,8 @@ public class PlayerMovement : MonoBehaviour
             yRotation = -1;
         }
     }
+
+    // Trigger the dash action
     private void DashTrigger()
     {
         if (!IsWalled())
@@ -126,6 +145,8 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(Dash());
         }
     }
+
+    // Perform the dash action
     private IEnumerator Dash()
     {
         CanDash = false;
@@ -139,16 +160,19 @@ public class PlayerMovement : MonoBehaviour
         rb.gravityScale = originalGravity;
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
-        CanDash = true;      
+        CanDash = true;
     }
+
+    // Check if the player is touching a wall
     private bool IsWalled()
     {
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
     }
 
+    // Handle wall sliding
     private void WallSlide()
     {
-        if(IsWalled() && !IsGrounded() && horizontal !=0f)
+        if (IsWalled() && !IsGrounded() && horizontal != 0f)
         {
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
@@ -160,6 +184,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Handle wall jumping
     private void WallJump()
     {
         if (isWallSliding)
@@ -191,6 +216,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Stop wall jumping
     private void StopWallJumping()
     {
         isWallJumping = false;

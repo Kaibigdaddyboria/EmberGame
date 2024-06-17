@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpingCounter;
     private Vector2 wallJumpingPower = new Vector2(6f, 14f);
 
+    [SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
@@ -151,14 +152,21 @@ public class PlayerMovement : MonoBehaviour
     {
         CanDash = false;
         isDashing = true;
+        boxCollider.enabled = false;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         rb.velocity = new Vector2(dashingPower * dashDirection, 0f);
         tr.emitting = true;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * dashDirection, 5f, wallLayer);
+        if (hit.collider)
+        {
+            boxCollider.enabled = true;
+        }
         yield return new WaitForSeconds(dashingTime);
         tr.emitting = false;
         rb.gravityScale = originalGravity;
         isDashing = false;
+        boxCollider.enabled = true;
         yield return new WaitForSeconds(dashingCooldown);
         CanDash = true;
     }

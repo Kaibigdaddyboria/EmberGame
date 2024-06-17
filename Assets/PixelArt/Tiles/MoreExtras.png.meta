@@ -111,8 +111,14 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
-      tessellationDetail: -1
+      physicsShape:
+      - - {x: 64, y: 64}
+        - {x: 1, y: 64}
+        - {x: 2, y: -1}
+        - {x: -64, y: -1}
+        - {x: -64, y: -64}
+        - {x: 64, y: -64}
+      tessellationDetail: 0
       bones: []
       spriteID: 318619b7e4bd7afc0800000000000000
       internalID: -3483574656620730349
@@ -166,15 +172,19 @@ TextureImporter:
       name: New Piskel-1.png (2)_3
       rect:
         serializedVersion: 2
-        x: 1537
-        y: 618
+        x: 1544
+        y: 527
         width: 128
         height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: 64, y: 17}
+        - {x: -64, y: 17}
+        - {x: -64, y: -64}
+        - {x: 64, y: -64}
       tessellationDetail: 0
       bones: []
       spriteID: 693e5f4559af62b499bf2e223fa37efe
@@ -209,14 +219,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 12
-        y: 225
+        y: 130
         width: 128
         height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: 64, y: 17}
+        - {x: -64, y: 17}
+        - {x: -64, y: -64}
+        - {x: 64, y: -64}
       tessellationDetail: 0
       bones: []
       spriteID: 38d593d14e86bb2448b63fbd6bada8f9
@@ -230,14 +244,18 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 140
-        y: 225
+        y: 130
         width: 128
         height: 128
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: 64, y: 17}
+        - {x: -64, y: 17}
+        - {x: -64, y: -64}
+        - {x: 64, y: -64}
       tessellationDetail: 0
       bones: []
       spriteID: 6134b16d34d2e7d45b0c6f961ccbddf7
@@ -251,7 +269,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 12
-        y: 353
+        y: 258
         width: 128
         height: 128
       alignment: 0
@@ -279,11 +297,57 @@ TextureImporter:
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: 64, y: 17}
+        - {x: -64, y: 17}
+        - {x: -64, y: -64}
+        - {x: 64, y: -64}
       tessellationDetail: 0
       bones: []
       spriteID: 1cbd81a892debe84289651598e95f89e
       internalID: -1144946058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoreExtras_0
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 258
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28409c39b7f7fd04183b4476e3a9b3db
+      internalID: -268029374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MoreExtras_1
+      rect:
+        serializedVersion: 2
+        x: 1544
+        y: 655
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3601d3beee74f64459e6725bc24e17d8
+      internalID: 1863705964
       vertices: []
       indices: 
       edges: []
@@ -299,6 +363,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      MoreExtras_0: -268029374
+      MoreExtras_1: 1863705964
       New Piskel-1.png (2)_0: -3483574656620730349
       New Piskel-1.png (2)_1: -422611581
       New Piskel-1.png (2)_2: 57952067

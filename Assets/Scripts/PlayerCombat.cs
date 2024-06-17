@@ -107,7 +107,7 @@ public class PlayerCombat : MonoBehaviour
     {
         rb.velocity = new Vector2(0, 0); 
         isDamaged = true;
-        Invoke(nameof(NotDamaged), 0.5f);
+        Invoke(nameof(NotDamaged), 0.3f);
         currentHealth -= damage; 
         animator.SetTrigger("Hurt");
         if (currentHealth <= 0)

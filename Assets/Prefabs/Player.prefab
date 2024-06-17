@@ -143,7 +143,7 @@ BoxCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1911
   m_ForceReceiveLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -189,7 +189,8 @@ MonoBehaviour:
   dashingCooldown: 1
   wallJumpingDuration: 0.4
   wallJumpingTime: 0.2
-  wallSlidingSpeed: 0
+  wallSlidingSpeed: 2
+  boxCollider: {fileID: 4641246888036021036}
   rb: {fileID: 5697971669657541156}
   groundCheck: {fileID: 6142190997357143838}
   groundLayer:
@@ -198,7 +199,7 @@ MonoBehaviour:
   wallCheck: {fileID: 5179489495381170804}
   wallLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 1088
   tr: {fileID: 6893743390335587000}
   combat: {fileID: 12817383536935164}
 --- !u!95 &2673534690613843326

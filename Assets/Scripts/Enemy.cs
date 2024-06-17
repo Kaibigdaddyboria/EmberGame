@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float delay;
     public Animator animator;
     public int maxHealth;
     public int currentHealth;
@@ -44,6 +43,7 @@ public class Enemy : MonoBehaviour
             if (pss.InRange && !ass.InAttackRange)
             {
                 // Calculate the direction towards the player
+                animator.SetInteger("AnimState", 2);
                 Vector3 Playerposition = new Vector3(pss.playerx, transform.position.y);
                 Vector3 enemyPosition = transform.position;
                 Vector3 direction = Playerposition - enemyPosition;

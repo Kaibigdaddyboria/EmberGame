@@ -21,7 +21,7 @@ public class AttackSensorScript : MonoBehaviour
     // This happens when another collider enters the trigger collider attached to the object
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Check if the object that entered the trigger is tagged as "Player"
+        // Check if the object that entered the trigger is tagged as Player
         if (other.gameObject.tag == "Player")
         {
             InAttackRange = true;
@@ -31,7 +31,7 @@ public class AttackSensorScript : MonoBehaviour
     // This happens when another collider exits the trigger collider attached to the object
     void OnTriggerExit2D(Collider2D other)
     {
-
+        // Check if the object that entered the trigger is tagged as Player
         if (other.gameObject.tag == "Player")
         {
             InAttackRange = false;

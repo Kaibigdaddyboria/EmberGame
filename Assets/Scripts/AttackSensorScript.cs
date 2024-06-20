@@ -6,18 +6,6 @@ public class AttackSensorScript : MonoBehaviour
 {
     public bool InAttackRange = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     // This happens when another collider enters the trigger collider attached to the object
     void OnTriggerEnter2D(Collider2D other)
     {

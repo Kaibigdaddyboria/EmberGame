@@ -10,12 +10,6 @@ public class BulletScript : MonoBehaviour
     public float direction = 1;
     public float rotation;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -27,7 +21,7 @@ public class BulletScript : MonoBehaviour
     // This function is called when the bullet collides with another object
     private void OnTriggerEnter2D(Collider2D hitinfo)
     {
-        // Checks wthat the collided object is not the ProximitySensor, AttackSensor, or Player
+        // Checks that the collided object is not the ProximitySensor, AttackSensor, or Player
         if (!hitinfo.CompareTag("ProximitySensor") && !hitinfo.CompareTag("AttackSensor") && !hitinfo.CompareTag("Player"))
         {
             Destroy(gameObject);

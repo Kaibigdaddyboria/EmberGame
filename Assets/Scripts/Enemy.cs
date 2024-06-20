@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour
                 Vector3 enemyPosition = transform.position;
                 Vector3 direction = Playerposition - enemyPosition;
                 direction = Vector3.Normalize(direction);
-
+                print(direction.x);
                 // Rotate the enemy to face the player
                 if (direction.x > 0)
                 {
@@ -102,6 +102,7 @@ public class Enemy : MonoBehaviour
     // Reduces the enemy's health and handles death
     public void TakeDamage(int damage)
     {
+        print("Enemy hit");
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
 

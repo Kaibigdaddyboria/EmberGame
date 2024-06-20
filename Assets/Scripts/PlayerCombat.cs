@@ -42,6 +42,7 @@ public class PlayerCombat : MonoBehaviour
             // Handle melee attack
             if (Input.GetKeyDown("c"))
             {
+                print("Can't attack");
                 rb.velocity = new Vector2(0, 0);
                 isAttacking = true;
                 Invoke(nameof(StopAttacking), 0.7f);
@@ -105,6 +106,7 @@ public class PlayerCombat : MonoBehaviour
     // Handle taking damage
     public void TakeDamage(int damage)
     {
+        print("Player hit");
         rb.velocity = new Vector2(0, 0); 
         isDamaged = true;
         Invoke(nameof(NotDamaged), 0.3f);

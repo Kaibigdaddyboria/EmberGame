@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpingCounter;
     private Vector2 wallJumpingPower = new Vector2(6f, 14f);
 
+    // References for Unity
     [SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
@@ -60,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
             Flip();
         }
         DashTrigger();
-        //S ets variables
+        // Sets variables
         bool grounded = IsGrounded();
         horizontal = Input.GetAxisRaw("Horizontal");
 
@@ -72,18 +73,18 @@ public class PlayerMovement : MonoBehaviour
             m_animator.SetTrigger("Jump");
         }
 
-        // Handle jump release
+        // Handles how big the jump is
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
+        // Sets animation
         else if (Mathf.Abs(horizontal) > Mathf.Epsilon && grounded)
             m_animator.SetInteger("AnimState", 2);
         else
             m_animator.SetInteger("AnimState", 0);
     }
 
-    // FixedUpdate is called at a fixed interval
     void FixedUpdate()
     {
         if (isDashing || combat.isAttacking || combat.isDamaged)
